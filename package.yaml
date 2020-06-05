@@ -1,0 +1,33 @@
+name:                ghc-clippy-plugin
+version:             0.0.0.1
+github:              "ArturGajowy/ghc-clippy-plugin"
+license:             BSD3
+author:              "Artur Gajowy"
+maintainer:          "artur.gajowy@gmail.com"
+copyright:           "2020 Artur Gajowy"
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+synopsis:            Override ghc error messages to make them more helpful
+category:            Tools
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/ghc-clippy-plugin#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- ghc
+- text
+- text-icu
+- text-regex-replace
+
+library:
+  source-dirs: src
+
+ghc-options:
+- -fobject-code
+- -Wall

@@ -1,0 +1,43 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 17156e53c5e4c6836c222d88716fd0e4ed073a31f81309485e5e67aeade9b651
+
+name:           ghc-clippy-plugin
+version:        0.0.0.1
+synopsis:       Override ghc error messages to make them more helpful
+description:    Please see the README on GitHub at <https://github.com/githubuser/ghc-clippy-plugin#readme>
+category:       Tools
+homepage:       https://github.com/ArturGajowy/ghc-clippy-plugin#readme
+bug-reports:    https://github.com/ArturGajowy/ghc-clippy-plugin/issues
+author:         Artur Gajowy
+maintainer:     artur.gajowy@gmail.com
+copyright:      2020 Artur Gajowy
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/ArturGajowy/ghc-clippy-plugin
+
+library
+  exposed-modules:
+      Clippy
+  other-modules:
+      Paths_ghc_clippy_plugin
+  hs-source-dirs:
+      src
+  ghc-options: -fobject-code -Wall
+  build-depends:
+      base >=4.7 && <5
+    , ghc
+    , text
+    , text-icu
+    , text-regex-replace
+  default-language: Haskell2010
