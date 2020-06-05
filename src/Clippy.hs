@@ -15,14 +15,16 @@ import           TcPluginM
 import           TcRnTypes
 
 plugin :: Plugin
-plugin = defaultPlugin {
-  tcPlugin = const $ Just $
-    TcPlugin
-    { tcPluginInit  = pure ()
-    , tcPluginSolve = \_ _ _ _ -> pure $ TcPluginOk [] []
-    , tcPluginStop  = const replaceMessages
-    }
-}
+plugin =
+  defaultPlugin
+  { tcPlugin = const $ Just $
+      TcPlugin
+      { tcPluginInit  = pure ()
+      , tcPluginSolve = \_ _ _ _ -> pure $ TcPluginOk [] []
+      , tcPluginStop  = const replaceMessages
+      }
+  , pluginRecompile = purePlugin
+  }
 
 replaceMessages :: TcPluginM ()
 replaceMessages = do
