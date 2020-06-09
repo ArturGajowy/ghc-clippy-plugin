@@ -24,6 +24,7 @@ dependencies:
 - text
 - text-icu
 - text-regex-replace
+- dhall
 
 library:
   source-dirs: src

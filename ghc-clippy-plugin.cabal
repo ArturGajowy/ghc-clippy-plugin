@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 17156e53c5e4c6836c222d88716fd0e4ed073a31f81309485e5e67aeade9b651
+-- hash: 9155e1e934c23c2eb79b8a4d1cdaa5168851344dad2434243f59c661368f6b3d
 
 name:           ghc-clippy-plugin
 version:        0.0.0.1
@@ -36,6 +36,7 @@ library
   ghc-options: -fobject-code -Wall
   build-depends:
       base >=4.7 && <5
+    , dhall
     , ghc
     , text
     , text-icu

@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Clippy
@@ -13,8 +14,10 @@ import qualified Data.Text             as T
 import           Data.Text             (Text)
 import           Data.Text.ICU         (regex)
 import           Data.Text.ICU.Replace (replaceAll)
+import           Dhall
 import           ErrUtils
 import           GhcPlugins            hiding (Rule, (<>))
+import           Prelude               hiding (print)
 import           TcPluginM
 import           TcRnTypes
 
@@ -30,12 +33,16 @@ plugin =
   , pluginRecompile = purePlugin
   }
 
-newtype Config = Config { rules :: [Rule] }
+newtype Config = Config { rules :: [Rule] } deriving Generic
+instance FromDhall Config
 
 data Rule = Rule
-    { match   :: Text
-    , replace :: Text
+    { match :: Text
+    , print :: Text
     }
+    deriving Generic
+instance FromDhall Rule
+
 
 data PEnv = PEnv
     { showMsgDoc :: MsgDoc -> Text
@@ -43,7 +50,7 @@ data PEnv = PEnv
     }
 
 loadConfig :: TcPluginM Config
-loadConfig = pure defaultConfig
+loadConfig = tcPluginIO $ input auto "./.clippy.dhall"
 
 replaceMessages :: Config -> TcPluginM ()
 replaceMessages config = do
@@ -87,35 +94,4 @@ replaceText :: PEnv -> Text -> Text
 replaceText env t = foldr replaceRule t (rules . config $ env)
 
 replaceRule :: Rule -> Text -> Text
-replaceRule rule = replaceAll (regex [] $ match rule) (fromString . T.unpack $ replace rule)
-
-defaultConfig :: Config
-defaultConfig = Config
-    [ Rule "(>>[ICS]>)|(<[ICS]<<)|(>[ICS]>)|(<[ICS]<)" ""
-    , Rule "Couldn't match type"                  "Couldn't match"
-    , Rule "Expected type:"                       "Expected:"
-    , Rule "  Actual type:"                       "     Got:"
-    , Rule "Couldn't match expected type ‘(.*?)’" "Expected: $1"
-    , Rule "            with actual type ‘(.*?)’" "     Got: $1"
-    , Rule "Couldn't match expected type ‘(.*)’ with actual type ‘(.*)’"
-                 "Expected: $1\n     Got: $2"
-    -- , Rule "(?s)>>C>.*?<C<<"                    ""
-    , Rule "(?s)In the \\w+ argument of.*?<C<<" "<C<<"
-    , Rule "(?s)In the expression.*?<C<<"       "<C<<"
-    , Rule "\\(bound at ([^)]*)\\)"             " -- $1"
-    , Rule
-        "Ambiguous type variable (‘\\w+’) arising from a use of (‘\\w+’)"
-        "Type variable $1 is ambiguous in $2."
-    , Rule "prevents the constraint (‘.+’) from being solved.*"
-                 "Can't pick an instance for $1."
-    , Rule "(Probable|Possible) fix:" "---\nMaybe-fix:"
-    , Rule "use a type annotation to specify what.*"
-                 "add type annotations to disambiguate."
-    , Rule "No instance for (.*?) arising from (a|the)( use of)? (.*)"
-                 "Need a $1 instance for usage of $4"
-    , Rule "(?s)the type signature for:\n  " "\n"
-    , Rule
-        "(?s)These potential instances .*? -fprint-potential-instances to see them all\\)"
-        "More info: compile with -fprint-potential-instances."
-    , Rule "Relevant bindings include" "Known types:\n"
-    ]
+replaceRule rule = replaceAll (regex [] $ rule & match) (fromString . T.unpack $ rule & print)
