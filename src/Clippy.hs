@@ -1,11 +1,14 @@
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeApplications  #-}
 
 module Clippy
   ( plugin
   )
 where
 
+import           Bag
+import           Control.Exception     (SomeException, tryJust)
 import           Data.Bifunctor
 import           Data.Function
 import           Data.IORef
@@ -28,7 +31,7 @@ plugin =
       TcPlugin
       { tcPluginInit  = pure ()
       , tcPluginSolve = \_ _ _ _ -> pure $ TcPluginOk [] []
-      , tcPluginStop  = const $ loadConfig >>= replaceMessages
+      , tcPluginStop  = const $ loadConfig >>= either cantInitializeWarning replaceMessages
       }
   , pluginRecompile = purePlugin
   }
@@ -49,8 +52,18 @@ data PEnv = PEnv
     , config     :: Config
     }
 
-loadConfig :: TcPluginM Config
-loadConfig = tcPluginIO $ input auto "./.clippy.dhall"
+loadConfig :: TcPluginM (Either String Config)
+loadConfig = tcPluginIO
+  . tryJust (Just . show @SomeException)
+  $ inputFile auto "./.clippy.dhall"
+
+cantInitializeWarning :: String -> TcPluginM ()
+cantInitializeWarning cause = do
+  dynFlags <- hsc_dflags <$> getTopEnv
+  let warning = mkPlainWarnMsg dynFlags span msgDoc
+      span    = mkGeneralSrcSpan $ mkFastString "ghc-clippy-plugin"
+      msgDoc  = text "Clippy plugin couldn't start. Cause:" $$ text cause
+  tcPluginIO $ printOrThrowWarnings dynFlags $ unitBag warning
 
 replaceMessages :: Config -> TcPluginM ()
 replaceMessages config = do
