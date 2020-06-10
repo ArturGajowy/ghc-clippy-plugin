@@ -6,6 +6,15 @@ Overrides GHC error and warning messages, to the user's liking.
 
 Configured using (how else!) regexps. Tested with stack and ghcid.
 
+## Showcase
+
+<img align="right" width="430" src="https://i.imgur.com/Beay7p4.png">
+<img width="430" src="https://i.imgur.com/CsYulBQ.png">
+
+Left: without Clippy.
+
+Right: with Clippy, using the sample config.
+
 ## But, why?
 
 For all kinds of reasons:
