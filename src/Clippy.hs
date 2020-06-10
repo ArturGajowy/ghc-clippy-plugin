@@ -46,7 +46,6 @@ data Rule = Rule
     deriving Generic
 instance FromDhall Rule
 
-
 data PEnv = PEnv
     { showMsgDoc :: MsgDoc -> Text
     , config     :: Config
@@ -90,6 +89,12 @@ replaceMsgDocsGroup env label msgDocs = text . T.unpack <$> filtered
   replaced = replaceText env wrapped
   wrapped  = (env & showMsgDoc) . vcat $ wrapGroup label msgDocs
 
+replaceText :: PEnv -> Text -> Text
+replaceText env t = foldr replaceRule t (rules . config $ env)
+
+replaceRule :: Rule -> Text -> Text
+replaceRule rule = replaceAll (regex [] $ rule & match) (fromString . T.unpack $ rule & print)
+
 wrapGroup :: Text -> [MsgDoc] -> [MsgDoc]
 wrapGroup label group =
   [open $ ">" <> label] ++ (wrapDoc label <$> group) ++ [close $ label <> "<"]
@@ -102,9 +107,3 @@ open label = text . T.unpack $ ">" <> label <> ">"
 
 close :: Text -> MsgDoc
 close label = text . T.unpack $ "<" <> label <> "<"
-
-replaceText :: PEnv -> Text -> Text
-replaceText env t = foldr replaceRule t (rules . config $ env)
-
-replaceRule :: Rule -> Text -> Text
-replaceRule rule = replaceAll (regex [] $ rule & match) (fromString . T.unpack $ rule & print)
