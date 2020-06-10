@@ -176,7 +176,7 @@ I'd like to thank the authors of
  - [Understanding Basic Haskell Error
 Messages](http://ics.p.lodz.pl/~stolarek/_media/pl:research:stolarek_understanding_basic_haskell_error_messages.pdf)
    for test cases as well
- - the fine folk working on GHC, for making this possible :heart:
+ - the wonderful folk working on GHC, for making this possible :heart:
 
 ## Roadmap
 
