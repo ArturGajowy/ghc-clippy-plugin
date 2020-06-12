@@ -14,7 +14,6 @@ import           Data.Function
 import           Data.IORef
 import           Data.String           (fromString)
 import qualified Data.Text             as T
-import           Data.Text             (Text)
 import           Data.Text.ICU         (regex)
 import           Data.Text.ICU.Replace (replaceAll)
 import           Dhall
@@ -59,17 +58,17 @@ loadConfig = tcPluginIO
 cantInitializeWarning :: String -> TcPluginM ()
 cantInitializeWarning cause = do
   dynFlags <- hsc_dflags <$> getTopEnv
-  let warning = mkPlainWarnMsg dynFlags span msgDoc
-      span    = mkGeneralSrcSpan $ mkFastString "ghc-clippy-plugin"
+  let warning = mkPlainWarnMsg dynFlags _span msgDoc
+      _span   = mkGeneralSrcSpan $ mkFastString "ghc-clippy-plugin"
       msgDoc  = text "Clippy plugin couldn't start. Cause:" $$ text cause
   tcPluginIO $ printOrThrowWarnings dynFlags $ unitBag warning
 
 replaceMessages :: Config -> TcPluginM ()
-replaceMessages config = do
+replaceMessages conf = do
   errsRef  <- tcl_errs . snd <$> getEnvs
   dynFlags <- hsc_dflags <$> getTopEnv
-  let showMsgDoc = T.pack . showSDoc dynFlags
-      replaceErrMsgs = fmap $ replaceErrMsgDoc $ PEnv showMsgDoc config
+  let _showMsgDoc = T.pack . showSDoc dynFlags
+      replaceErrMsgs = fmap $ replaceErrMsgDoc $ PEnv _showMsgDoc conf
   tcPluginIO $ modifyIORef errsRef (bimap replaceErrMsgs replaceErrMsgs)
 
 replaceErrMsgDoc :: PEnv -> ErrMsg -> ErrMsg
