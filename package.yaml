@@ -8,23 +8,20 @@ copyright:           "2020 Artur Gajowy"
 
 extra-source-files:
 - README.md
+- ChangeLog.md
 
-# Metadata used when publishing your package
-synopsis:            Override ghc error messages to make them more helpful
-category:            Tools
+synopsis:            Override GHC error messages to the user's liking
+category:            Development, Compiler Plugin
 
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/ghc-clippy-plugin#readme>
+description:         Please see the README on GitHub at <https://github.com/ArturGajowy/ghc-clippy-plugin#readme>
 
 dependencies:
-- base >= 4.7 && < 5
-- ghc
-- text
-- text-icu
-- text-regex-replace
-- dhall
+- base               >= 4.7 && < 5
+- ghc                >= 8.8.2 && < 8.11
+- text               >= 1.2.3.2 && < 1.3
+- text-icu           >= 0.7.0 && < 0.8
+- text-regex-replace >= 0.1.1 && < 0.2
+- dhall              >= 1.30.0 && < 1.33
 
 library:
   source-dirs: src
