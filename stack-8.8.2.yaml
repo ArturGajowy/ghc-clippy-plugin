@@ -1,0 +1,5 @@
+resolver: lts-15.3
+
+extra-deps:
+- text-regex-replace-0.1.1.3
+
