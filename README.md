@@ -2,6 +2,8 @@
 
 [![Build status](https://img.shields.io/travis/ArturGajowy/ghc-clippy-plugin.svg?logo=travis)](https://travis-ci.org/ArturGajowy/ghc-clippy-plugin)
 [![Hackage](https://img.shields.io/hackage/v/ghc-clippy-plugin.svg?logo=haskell)](https://hackage.haskell.org/package/ghc-clippy-plugin)
+[![Stackage Lts](http://stackage.org/package/ghc-clippy-plugin/badge/lts)](http://stackage.org/lts/package/ghc-clippy-plugin)
+[![Stackage Nightly](http://stackage.org/package/ghc-clippy-plugin/badge/nightly)](http://stackage.org/nightly/package/ghc-clippy-plugin)
 [![License](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 A helpful companion to GHC.
