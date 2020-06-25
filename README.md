@@ -14,8 +14,8 @@ Configured using (how else!) regexps. Tested with stack and ghcid.
 
 ## Showcase
 
-<img align="right" width="430" src="https://i.imgur.com/Beay7p4.png">
-<img width="430" src="https://i.imgur.com/CsYulBQ.png">
+<img align="right" width="409" src="https://i.imgur.com/Beay7p4.png">
+<img width="409" src="https://i.imgur.com/CsYulBQ.png">
 
 Left: without Clippy.
 
